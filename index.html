@@ -1,0 +1,1574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Federalist Papers Interactive Learning Journey</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            min-height: 100vh;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #8B4513 0%, #D2691E 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            border-bottom: 5px solid #654321;
+        }
+
+        .header h1 {
+            font-size: 2.2em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.95;
+        }
+
+        /* Content Area */
+        .content {
+            padding: 40px;
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            background: #e0e0e0;
+            border-radius: 10px;
+            height: 30px;
+            margin-bottom: 30px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-bar {
+            background: linear-gradient(90deg, #4CAF50 0%, #45a049 100%);
+            height: 100%;
+            width: 0%;
+            transition: width 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        /* Section Styles */
+        .section {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Introduction Section */
+        .intro-box {
+            background: #f8f9fa;
+            border-left: 5px solid #8B4513;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .intro-box h2 {
+            color: #8B4513;
+            margin-bottom: 15px;
+        }
+
+        .intro-box ul {
+            margin-left: 25px;
+            margin-top: 10px;
+        }
+
+        .intro-box li {
+            margin: 8px 0;
+        }
+
+        /* Question Card */
+        .question-card {
+            background: #ffffff;
+            border: 2px solid #8B4513;
+            border-radius: 10px;
+            padding: 25px;
+            margin: 25px 0;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .question-card h3 {
+            color: #8B4513;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .question-number {
+            background: #8B4513;
+            color: white;
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+
+        /* Answer Sections */
+        .answer-section {
+            background: #f0f4f8;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 8px;
+            border-left: 4px solid #4CAF50;
+        }
+
+        .answer-section h4 {
+            color: #2c3e50;
+            margin-bottom: 12px;
+        }
+
+        .answer-section p {
+            margin: 10px 0;
+            color: #34495e;
+        }
+
+        /* Scenario Box */
+        .scenario-box {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+
+        .scenario-box h4 {
+            color: #856404;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+        }
+
+        .scenario-box h4::before {
+            content: "💭";
+            margin-right: 10px;
+            font-size: 1.3em;
+        }
+
+        /* Perspective Boxes */
+        .perspective {
+            background: white;
+            border: 2px solid #6c757d;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 6px;
+        }
+
+        .perspective.pro {
+            border-color: #28a745;
+            background: #f1f9f4;
+        }
+
+        .perspective.con {
+            border-color: #dc3545;
+            background: #fcf3f4;
+        }
+
+        .perspective h5 {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .perspective.pro h5::before {
+            content: "✓";
+            color: #28a745;
+            font-weight: bold;
+            margin-right: 8px;
+            font-size: 1.2em;
+        }
+
+        .perspective.con h5::before {
+            content: "✗";
+            color: #dc3545;
+            font-weight: bold;
+            margin-right: 8px;
+            font-size: 1.2em;
+        }
+
+        /* Source Links */
+        .sources {
+            background: #e8f4f8;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 6px;
+            border-left: 4px solid #17a2b8;
+        }
+
+        .sources h4 {
+            color: #0c5460;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .sources h4::before {
+            content: "📚";
+            margin-right: 8px;
+        }
+
+        .sources ul {
+            margin-left: 20px;
+        }
+
+        .sources li {
+            margin: 8px 0;
+        }
+
+        .sources a {
+            color: #007bff;
+            text-decoration: none;
+            word-break: break-all;
+        }
+
+        .sources a:hover {
+            text-decoration: underline;
+        }
+
+        /* Navigation Buttons */
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            font-size: 1.1em;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #8B4513 0%, #D2691E 100%);
+            color: white;
+            flex: 1;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(139, 69, 19, 0.4);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+            transform: translateY(-2px);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Key Terms */
+        .key-term {
+            background: #fffbea;
+            border: 1px solid #f0e68c;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            color: #8B4513;
+        }
+
+        /* Real World Connection Badge */
+        .real-world-badge {
+            display: inline-block;
+            background: #17a2b8;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.85em;
+            margin-bottom: 10px;
+        }
+
+        /* Activity Instructions */
+        .activity-box {
+            background: #d4edda;
+            border: 2px solid #28a745;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+
+        .activity-box h4 {
+            color: #155724;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+        }
+
+        .activity-box h4::before {
+            content: "✏️";
+            margin-right: 10px;
+        }
+
+        /* Summary Section */
+        .summary-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin: 20px 0;
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .summary-card h3 {
+            margin-bottom: 20px;
+        }
+
+        .summary-card ul {
+            margin-left: 20px;
+        }
+
+        .summary-card li {
+            margin: 10px 0;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.6em;
+            }
+
+            .content {
+                padding: 20px;
+            }
+
+            .nav-buttons {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+
+        /* Print Styles */
+        @media print {
+            body {
+                background: white;
+            }
+
+            .container {
+                box-shadow: none;
+            }
+
+            .nav-buttons, .progress-container {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏛️ The Federalist Papers</h1>
+            <p>Understanding America's Founding Principles Through Real-World Examples</p>
+        </div>
+
+        <div class="progress-container">
+            <div class="progress-bar" id="progressBar">0%</div>
+        </div>
+
+        <div class="content">
+            <!-- Section 0: Introduction -->
+            <div class="section active" id="section0">
+                <div class="intro-box">
+                    <h2>Welcome to Your Learning Journey! 📖</h2>
+                    <p>In this interactive activity, you'll explore the <span class="key-term">Federalist Papers</span> - a series of 85 essays written in 1787-1788 to convince Americans to support the new Constitution.</p>
+                    
+                    <h3 style="margin-top: 20px; color: #8B4513;">What You'll Learn:</h3>
+                    <ul>
+                        <li>How America's government was designed to prevent tyranny</li>
+                        <li>Why the Founders created checks and balances</li>
+                        <li>Real examples of these principles working in modern America</li>
+                        <li>Different perspectives on constitutional questions</li>
+                        <li>How federal and state powers are balanced</li>
+                        <li>The reasoning behind key constitutional features</li>
+                    </ul>
+
+                    <h3 style="margin-top: 20px; color: #8B4513;">Who Wrote the Federalist Papers?</h3>
+                    <ul>
+                        <li><strong>Alexander Hamilton</strong> - First Secretary of the Treasury (51 essays)</li>
+                        <li><strong>James Madison</strong> - "Father of the Constitution," 4th President (29 essays)</li>
+                        <li><strong>John Jay</strong> - First Chief Justice of the Supreme Court (5 essays)</li>
+                    </ul>
+
+                    <p style="margin-top: 20px;"><strong>Time:</strong> This activity takes about 60-75 minutes. Work at your own pace!</p>
+                    <p><strong>Questions:</strong> You'll explore 16 key questions plus a comprehensive summary.</p>
+                </div>
+
+                <div class="activity-box">
+                    <h4>How This Works</h4>
+                    <p>You'll explore 16 big questions about American government, plus a final summary. For each question, you'll see:</p>
+                    <ul style="margin-left: 25px; margin-top: 10px;">
+                        <li>What the Federalist Papers said</li>
+                        <li>Real historical examples OR thoughtful scenarios</li>
+                        <li>Different viewpoints to consider</li>
+                        <li>Sources to verify the information (when applicable)</li>
+                        <li>"Think About It" questions to deepen your understanding</li>
+                    </ul>
+                </div>
+
+                <div class="nav-buttons">
+                    <button class="btn btn-primary" onclick="nextSection()">Start Learning →</button>
+                </div>
+            </div>
+
+            <!-- Section 1: Checks and Balances - Watergate -->
+            <div class="section" id="section1">
+                <div class="question-card">
+                    <span class="question-number">Question 1 of 10</span>
+                    <h3>How do checks and balances prevent any one branch from becoming too powerful?</h3>
+                    
+                    <div class="answer-section">
+                        <h4>What the Federalist Papers Said:</h4>
+                        <p>The Founders designed a system where each branch of government can limit the others. This way, no single person or group can control everything.</p>
+                        <p><strong>The three branches are:</strong></p>
+                        <ul style="margin-left: 25px;">
+                            <li><strong>Legislative (Congress)</strong> - Makes laws</li>
+                            <li><strong>Executive (President)</strong> - Enforces laws</li>
+                            <li><strong>Judicial (Courts)</strong> - Interprets laws</li>
+                        </ul>
+                    </div>
+
+                    <span class="real-world-badge">🔍 Real-World Example</span>
+                    <div class="scenario-box">
+                        <h4>The Watergate Scandal (1974)</h4>
+                        <p>In 1974, President Richard Nixon tried to cover up a crime. He claimed he didn't have to give investigators his secret tape recordings. This tested whether a president could be above the law.</p>
+                        
+                        <p style="margin-top: 15px;"><strong>How did checks and balances work?</strong></p>
+                        <ul style="margin-left: 25px; margin-top: 10px;">
+                            <li><strong>The Courts:</strong> The Supreme Court unanimously ruled Nixon had to hand over the tapes (United States v. Nixon)</li>
+                            <li><strong>Congress:</strong> The House Judiciary Committee prepared to impeach Nixon</li>
+                            <li><strong>Result:</strong> Nixon resigned on August 9, 1974, before he could be removed from office</li>
+                        </ul>
+
+                        <p style="margin-top: 15px; background: white; padding: 15px; border-radius: 5px;">
+                            <strong>💡 Key Takeaway:</strong> All three branches worked together to stop presidential abuse of power - exactly as the Federalist Papers predicted!
+                        </p>
+                    </div>
+
+                    <div class="sources">
+                        <h4>Verify These Facts:</h4>
+                        <ul>
+                            <li><a href="https://supreme.justia.com/cases/federal/us/418/683/" target="_blank">United States v. Nixon - Supreme Court Decision (1974)</a></li>
+                            <li><a href="https://billofrightsinstitute.org/activities/case-studies-checks-and-balances" target="_blank">Bill of Rights Institute - Checks and Balances Case Studies</a></li>
+                            <li><a href="https://constitutioncenter.org/blog/anniversary-of-united-states-v-nixon" target="_blank">National Constitution Center - Watergate Anniversary</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="nav-buttons">
+                    <button class="btn btn-secondary" onclick="prevSection()">← Back</button>
+                    <button class="btn btn-primary" onclick="nextSection()">Next Question →</button>
+                </div>
+            </div>
+
+            <!-- Section 2: Federalism - Affordable Care Act -->
+            <div class="section" id="section2">
+                <div class="question-card">
+                    <span class="question-number">Question 2 of 10</span>
+                    <h3>How does the federal government balance power with state governments?</h3>
+                    
+                    <div class="answer-section">
+                        <h4>What the Federalist Papers Said:</h4>
+                        <p>The Founders created <span class="key-term">federalism</span> - a system where power is shared between national and state governments.</p>
+                        <ul style="margin-left: 25px; margin-top: 10px;">
+                            <li><strong>Federal powers:</strong> National defense, foreign policy, interstate trade</li>
+                            <li><strong>State powers:</strong> Education, local laws, day-to-day governance</li>
+                            <li><strong>Shared powers:</strong> Taxation, law enforcement, transportation</li>
+                        </ul>
+                    </div>
+
+                    <span class="real-world-badge">🔍 Real-World Example</span>
+                    <div class="scenario-box">
+                        <h4>The Affordable Care Act Case (2012)</h4>
+                        <p>In 2012, the Supreme Court had to decide: Can the federal government force states to expand Medicaid (health insurance for low-income people) by threatening to take away all their Medicaid funding?</p>
+                        
+                        <p style="margin-top: 15px;"><strong>What the Court Decided:</strong></p>
+                        <p>The Supreme Court said <strong>NO</strong> - the federal government was being too coercive (forcing). States had to have a real choice.</p>
+
+                        <div style="background: white; padding: 15px; border-radius: 5px; margin-top: 15px;">
+                            <strong>Why this matters:</strong>
+                            <ul style="margin-left: 25px; margin-top: 10px;">
+                                <li>Threatening to take away 10% of a state's budget wasn't a fair "choice"</li>
+                                <li>States must be able to make their own decisions</li>
+                                <li>The federal government can't bully states into compliance</li>
+                            </ul>
+                        </div>
+
+                        <p style="margin-top: 15px; background: #f0f4f8; padding: 15px; border-radius: 5px;">
+                            <strong>💡 Key Takeaway:</strong> This case shows federalism still matters today - states maintain real power even when the federal government offers money.
+                        </p>
+                    </div>
+
+                    <div class="sources">
+                        <h4>Verify These Facts:</h4>
+                        <ul>
+                            <li><a href="https://supreme.justia.com/cases/federal/us/567/519/" target="_blank">NFIB v. Sebelius - Supreme Court Decision (2012)</a></li>
+                            <li><a href="https://www.law.cornell.edu/wex/national_federation_of_independent_business_v._sebelius_(2012)" target="_blank">Cornell Law - NFIB v. Sebelius Explanation</a></li>
+                            <li><a href="https://federalism.org/encyclopedia/no-topic/national-federation-of-independent-business-v-sebelius-567-u-s-519-2012/" target="_blank">Center for the Study of Federalism - Case Analysis</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="nav-buttons">
+                    <button class="btn btn-secondary" onclick="prevSection()">← Back</button>
+                    <button class="btn btn-primary" onclick="nextSection()">Next Question →</button>
+                </div>
+            </div>
+
+            <!-- Section 3: Factions - Modern Interest Groups -->
+            <div class="section" id="section3">
+                <div class="question-card">
+                    <span class="question-number">Question 3 of 10</span>
+                    <h3>What did Federalist No. 10 say about factions, and how does this work today?</h3>
+                    
+                    <div class="answer-section">
+                        <h4>What the Federalist Papers Said:</h4>
+                        <p>James Madison wrote Federalist No. 10 about <span class="key-term">factions</span> - groups of people united by a common interest.</p>
+                        
+                        <div style="background: white; padding: 15px; border-radius: 5px; margin-top: 15px;">
+                            <p><strong>Madison's Big Idea:</strong> You can't eliminate factions without destroying freedom. Instead, a large, diverse republic naturally controls them.</p>
+                            
+                            <p style="margin-top: 10px;"><strong>How?</strong> With many different groups competing, no single faction can easily dominate. Groups must compromise and form coalitions.</p>
+                        </div>
+                    </div>
+
+                    <span class="real-world-badge">🔍 Real-World Example</span>
+                    <div class="scenario-box">
+                        <h4>Modern Factions (Interest Groups Today)</h4>
+                        <p>Factions still exist, but we usually call them "interest groups" or "special interest groups." Here are examples:</p>
+                        
+                        <ul style="margin-left: 25px; margin-top: 15px;">
+                            <li><strong>Political Parties:</strong> Democrats, Republicans, Libertarians</li>
+                            <li><strong>Issue Groups:</strong> National Rifle Association (NRA), Sierra Club (environmental), ACLU (civil liberties)</li>
+                            <li><strong>Labor Groups:</strong> Teachers' unions, police unions</li>
+                            <li><strong>Business Groups:</strong> Chamber of Commerce, tech industry associations</li>
+                            <li><strong>Social Movements:</strong> Climate activism, racial justice organizations</li>
+                        </ul>
+
+                        <div style="background: white; padding: 15px; border-radius: 5px; margin-top: 15px;">
+                            <strong>Madison's Prediction in Action:</strong>
+                            <p style="margin-top: 10px;">Because America is so large and diverse, no single group can control everything. Environmental groups compete with business groups. Urban interests compete with rural interests. This competition forces compromise!</p>
+                        </div>
+
+                        <p style="margin-top: 15px; background: #f0f4f8; padding: 15px; border-radius: 5px;">
+                            <strong>💡 Key Takeaway:</strong> Madison was right - America's size and diversity prevent any single faction from dominating. Multiple competing groups create balance.
+                        </p>
+                    </div>
+
+                    <div class="sources">
+                        <h4>Verify These Facts:</h4>
+                        <ul>
+                            <li><a href="https://billofrightsinstitute.org/primary-sources/federalist-no-10" target="_blank">Bill of Rights Institute - Full Text of Federalist No. 10</a></li>
+                            <li><a href="https://teachingamericanhistory.org/document/federalist-10/" target="_blank">Teaching American History - Federalist No. 10 Analysis</a></li>
+                            <li><a href="https://avalon.law.yale.edu/18th_century/fed10.asp" target="_blank">Yale Law School - Federalist No. 10 Original Text</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="nav-buttons">
+                    <button class="btn btn-secondary" onclick="prevSection()">← Back</button>
+                    <button class="btn btn-primary" onclick="nextSection()">Next Question →</button>
+                </div>
+            </div>
+
+            <!-- Section 4: Electoral College Debate -->
+            <div class="section" id="section4">
+                <div class="question-card">
+                    <span class="question-number">Question 4 of 10</span>
+                    <h3>Why did the Founders create the Electoral College instead of direct popular vote?</h3>
+                    
+                    <div class="answer-section">
+                        <h4>What the Federalist Papers Said (Federalist No. 68):</h4>
+                        <p>Alexander Hamilton defended the Electoral College for several reasons:</p>
+                        <ul style="margin-left: 25px; margin-top: 10px;">
+                            <li>Prevents candidates from only focusing on heavily populated areas</li>
+                            <li>Forces candidates to build support across many states</li>
+                            <li>Balances power between large and small states</li>
+                            <li>Provides a filter against unqualified demagogues</li>
+                            <li>Respects federalism (state-based system)</li>
+                        </ul>
+                    </div>
+
+                    <span class="real-world-badge">💭 Hypothetical Scenario</span>
+                    <div class="scenario-box">
+                        <h4>The Debate: A popular celebrity wins the popular vote by huge margins in California, New York, and Texas, but loses the Electoral College after narrowly losing most other states.</h4>
+                        
+                        <div class="perspective pro">
+                            <h5>Supporting Electoral College:</h5>
+                            <p>"The system worked! The winning candidate built support across diverse states - farms, factories, cities, and rural areas. The celebrity only appealed to urban voters in a few big states. Without the Electoral College, candidates would ignore everyone except people in major cities. Small states would be completely voiceless. Our system ensures presidents represent the whole country, not just population centers."</p>
+                        </div>
+
+                        <div class="perspective con">
+                            <h5>Against Electoral College:</h5>
+                            <p>"This is undemocratic! More Americans voted for the celebrity, so that person should be president. Why should a Wyoming voter's choice count more than a California voter's? 'One person, one vote' is the basic principle of democracy. The Founders designed this for a different time. A national popular vote would make every vote equal and force candidates to seek votes everywhere, not just in 'swing states.'"</p>
+                        </div>
+
+                        <div style="background: white; padding: 15px; border-radius: 5px; margin-top: 15px;">
+                            <strong>📊 Both Sides Have Valid Points:</strong>
+                            <ul style="margin-left: 25px; margin-top: 10px;">
+                                <li><strong>Pro-Electoral College:</strong> Does protect federalism and prevents pure majority rule</li>
+                                <li><strong>Against Electoral College:</strong> Can produce presidents who lose the popular vote, giving disproportionate power to swing states</li>
+                            </ul>
+                        </div>
+
+                        <p style="margin-top: 15px; background: #f0f4f8; padding: 15px; border-radius: 5px;">
+                            <strong>💡 Real Connection:</strong> This actually happened in 2000 and 2016, when presidents won the Electoral College but lost the popular vote.
+                        </p>
+                    </div>
+
+                    <div class="activity-box">
+                        <h4>Think About It:</h4>
+                        <p>Which argument do you find more convincing? Why? Consider both protecting small states AND ensuring every vote counts equally.</p>
+                    </div>
+                </div>
+
+                <div class="nav-buttons">
+                    <button class="btn btn-secondary" onclick="prevSection()">← Back</button>
+                    <button class="btn btn-primary" onclick="nextSection()">Next Question →</button>
+                </div>
+            </div>
+
+            <!-- Section 5: Lifetime Judicial Appointments -->
+            <div class="section" id="section5">
+                <div class="question-card">
+                    <span class="question-number">Question 5 of 10</span>
+                    <h3>Why do federal judges serve for life?</h3>
+                    
+                    <div class="answer-section">
+                        <h4>What the Federalist Papers Said (Federalist No. 78):</h4>
+                        <p>Alexander Hamilton argued that lifetime appointments are essential for:</p>
+                        <ul style="margin-left: 25px; margin-top: 10px;">
+                            <li><strong>Judicial Independence:</strong> Judges must rule based on law, not popularity</li>
+                            <li><strong>Protecting Rights:</strong> Judges sometimes must make unpopular decisions to protect minorities</li>
+                            <li><strong>Expertise:</strong> Complex legal questions require years of experience</li>
+                            <li><strong>Checking Other Branches:</strong> Judges can only check Congress/President if they can't be fired</li>
+                            <li><strong>Stability:</strong> Consistent legal interpretation over time</li>
+                        </ul>
+                    </div>
+
+                    <span class="real-world-badge">💭 Hypothetical Scenario</span>
+                    <div class="scenario-box">
+                        <h4>The Debate: A Supreme Court Justice is appointed at age 42 and serves for 40 years. Their views, once mainstream, become increasingly out of step with society.</h4>
+                        
+                        <div class="perspective pro">
+                            <h5>Supporting Lifetime Appointments:</h5>
+                            <p>"The Constitution shouldn't change based on opinion polls! This Justice protects enduring principles, not shifting political winds. If judges feared removal for unpopular decisions, they'd become politicians in robes. A judge who protects unpopular speech, religious minorities, or accused criminals needs lifetime tenure to have courage. That's exactly what prevents majority tyranny."</p>
+                        </div>
+
+                        <div class="perspective con">
+                            <h5>Against Lifetime Appointments (Supporting Term Limits):</h5>
+                            <p>"Forty years is too long for any unelected official to wield such power! The Founders expected shorter lifespans - life tenure in 1787 meant maybe 15 years, not 40+. One president's appointments shouldn't control constitutional interpretation for two generations. Term limits (like 18 years) would preserve independence while ensuring regular turnover and preventing justices from serving into cognitive decline."</p>
+                        </div>
+
+                        <div style="background: white; padding: 15px; border-radius: 5px; margin-top: 15px;">
+                            <strong>📊 Both Sides Have Valid Points:</strong>
+                            <ul style="margin-left: 25px; margin-top: 10px;">
+                                <li><strong>Lifetime Tenure:</strong> Truly does protect judicial independence from political pressure</li>
+                                <li><strong>Term Limits:</strong> Modern lifespans create consequences the Founders didn't anticipate</li>
+                            </ul>
+                        </div>
+
+                        <p style="margin-top: 15px; background: #f0f4f8; padding: 15px; border-radius: 5px;">
+                            <strong>💡 Real Example:</strong> Justice Stephen Breyer served until age 83 (retired 2022). There are ongoing proposals for Supreme Court term limits.
+                        </p>
+                    </div>
+
+                    <div class="activity-box">
+                        <h4>Think About It:</h4>
+                        <p>Should judges serve for life, or should there be term limits? What problems would each approach solve? What new problems might each create?</p>
+                    </div>
+                </div>
+
+                <div class="nav-buttons">
+                    <button class="btn btn-secondary" onclick="prevSection()">← Back</button>
+                    <button class="btn btn-primary" onclick="nextSection()">Next Question →</button>
+                </div>
+            </div>
+
+            <!-- Section 6: Senate Structure -->
+            <div class="section" id="section6">
+                <div class="question-card">
+                    <span class="question-number">Question 6 of 10</span>
+                    <h3>Why does the Senate have six-year terms while the House has two-year terms?</h3>
+                    
+                    <div class="answer-section">
+                        <h4>What the Federalist Papers Said (Federalist No. 62-63):</h4>
+                        <p>The Founders designed two very different chambers of Congress:</p>
+                        
+                        <div style="background: white; padding: 15px; border-radius: 5px; margin-top: 15px;">
+                            <p><strong>House of Representatives (2-year terms):</strong></p>
+                            <ul style="margin-left: 25px;">
+                                <li>Responds quickly to public opinion</li>
+                                <li>Represents local interests</li>
+                                <li>All members up for re-election every 2 years</li>
+                            </ul>
+
+                            <p style="margin-top: 15px;"><strong>Senate (6-year terms):</strong></p>
+                            <ul style="margin-left: 25px;">
+                                <li>Provides stability and long-term thinking</li>
+                                <li>Acts as a "cooling saucer" for hasty House decisions</li>
+                                <li>Only 1/3 of senators up for re-election every 2 years</li>
+                                <li>Senators can make unpopular but necessary decisions</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <span class="real-world-badge">💭 Hypothetical Scenario</span>
+                    <div class="scenario-box">
+                        <h4>The Debate: After a terrorist attack, Congress debates emergency surveillance legislation that restricts civil liberties.</h4>
+                        
+                        <div class="perspective pro">
+                            <h5>House Position (Short Terms):</h5>
+                            <p>"Our constituents are terrified and demand immediate action! We were elected to represent their current wishes, and right now they want security even if it means sacrificing some privacy. We face voters in 18 months - we must act on what they want today. The people have spoken through us!"</p>
+                        </div>
+
+                        <div class="perspective con">
+                            <h5>Senate Position (Long Terms):</h5>
+                            <p>"We understand public fear, but we have a responsibility to consider long-term consequences. Our six-year terms allow us to resist temporary panic and ensure we don't create permanent laws based on temporary emotions. History shows civil liberties restrictions passed in crisis are difficult to repeal later. We should proceed more cautiously."</p>
+                        </div>
+
+                        <div style="background: white; padding: 15px; border-radius: 5px; margin-top: 15px;">
+                            <strong>📊 Both Sides Have Valid Points:</strong>
+                            <ul style="margin-left: 25px; margin-top: 10px;">
+                                <li><strong>House:</strong> Representatives should be responsive to constituents; security threats require action</li>
+                                <li><strong>Senate:</strong> Passion-driven legislation can cause lasting damage; distance from elections enables wiser deliberation</li>
+                            </ul>
+                        </div>
+
+                        <p style="margin-top: 15px; background: #f0f4f8; padding: 15px; border-radius: 5px;">
+                            <strong>💡 Real Example:</strong> This dynamic played out with the USA PATRIOT Act (2001), where debates about security versus civil liberties continue today.
+                        </p>
+                    </div>
+
+                    <div class="activity-box">
+                        <h4>Think About It:</h4>
+                        <p>Is it better for elected officials to do exactly what people want right now, or to think about long-term consequences even if it's unpopular? Why might we want both?</p>
+                    </div>
+                </div>
+
+                <div class="nav-buttons">
+                    <button class="btn btn-secondary" onclick="prevSection()">← Back</button>
+                    <button class="btn btn-primary" onclick="nextSection()">Next Question →</button>
+                </div>
+            </div>
+
+            <!-- Section 7: Preventing Tyranny -->
+            <div class="section" id="section7">
+                <div class="question-card">
+                    <span class="question-number">Question 7 of 10</span>
+                    <h3>How did the Founders design the Constitution to prevent tyranny?</h3>
+                    
+                    <div class="answer-section">
+                        <h4>What the Federalist Papers Said:</h4>
+                        <p>The Constitution includes multiple anti-tyranny mechanisms:</p>
+                        <ul style="margin-left: 25px; margin-top: 10px;">
+                            <li><strong>Separation of Powers:</strong> Legislative, Executive, Judicial branches have different jobs</li>
+                            <li><strong>Checks and Balances:</strong> Each branch can limit the others</li>
+                            <li><strong>Federalism:</strong> Power divided between national and state governments</li>
+                            <li><strong>Bicameralism:</strong> Two houses of Congress with different constituencies</li>
+                            <li><strong>Bill of Rights:</strong> Explicit protections for individual liberties</li>
+                        </ul>
+                        
+                        <p style="margin-top: 15px; background: #fffbea; padding: 15px; border-radius: 5px;">
+                            <strong>Federalist No. 51:</strong> "If men were angels, no government would be necessary. If angels were to govern men, neither external nor internal controls on government would be necessary."
+                        </p>
+                    </div>
+
+                    <span class="real-world-badge">💭 Hypothetical Scenario</span>
+                    <div class="scenario-box">
+                        <h4>The Debate: During a severe economic crisis, the President declares a national emergency and:</h4>
+                        <ul style="margin-left: 25px; margin-top: 10px;">
+                            <li>Orders the Treasury to print money without Congressional approval</li>
+                            <li>Directs the military to seize private property without compensation</li>
+                            <li>Announces courts cannot review these emergency actions</li>
+                        </ul>
+                        <p style="margin-top: 10px;">The President argues: "The emergency is too severe for normal constitutional processes - I'm acting to save the nation."</p>
+                        
+                        <div class="perspective pro">
+                            <h5>Constitutional Limits Position:</h5>
+                            <p>"This is tyranny dressed as emergency! The Constitution's genius is limiting power even during crisis. The President has emergency authorities, but none that eliminate checks and balances. If we suspend the Constitution during crisis, it becomes meaningless - emergencies are exactly when tyranny emerges! Congress can impeach, courts can enjoin, states can resist. Separation of powers isn't a luxury for peacetime - it's essential protection."</p>
+                        </div>
+
+                        <div class="perspective con">
+                            <h5>Emergency Powers Position:</h5>
+                            <p>"Constitutional formalities are meaningless if the nation collapses! The Founders couldn't anticipate modern crises. Every democracy grants emergency powers - Lincoln suspended habeas corpus, FDR passed the New Deal. Rigid 18th-century rules during 21st-century emergencies is suicidal. Once stability returns, normal processes resume. The real tyranny is letting constitutional formalism cause national destruction!"</p>
+                        </div>
+
+                        <div style="background: white; padding: 15px; border-radius: 5px; margin-top: 15px;">
+                            <strong>📊 Both Sides Have Valid Points:</strong>
+                            <ul style="margin-left: 25px; margin-top: 10px;">
+                                <li><strong>Limits Defenders:</strong> History shows "emergency" powers enable tyranny (e.g., Nazi Germany)</li>
+                                <li><strong>Emergency Advocates:</strong> Genuine crises require swift action; overly rigid rules prevent necessary responses</li>
+                            </ul>
+                        </div>
+
+                        <p style="margin-top: 15px; background: #f0f4f8; padding: 15px; border-radius: 5px;">
+                            <strong>💡 Real Connection:</strong> Debates about presidential emergency declarations (border security, COVID-19, climate) reflect this ongoing tension.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="nav-buttons">
+                    <button class="btn btn-secondary" onclick="prevSection()">← Back</button>
+                    <button class="btn btn-primary" onclick="nextSection()">Next Question →</button>
+                </div>
+            </div>
+
+            <!-- Section 8: Human Nature and Government -->
+            <div class="section" id="section8">
+                <div class="question-card">
+                    <span class="question-number">Question 8 of 10</span>
+                    <h3>What did the Federalist Papers assume about human nature?</h3>
+                    
+                    <div class="answer-section">
+                        <h4>What the Federalist Papers Said:</h4>
+                        <p>The Founders designed government based on realistic views of human nature:</p>
+                        
+                        <div style="background: white; padding: 15px; border-radius: 5px; margin-top: 15px;">
+                            <p><strong>Humans are:</strong></p>
+                            <ul style="margin-left: 25px;">
+                                <li>Self-interested and ambitious</li>
+                                <li>Prone to form groups (factions) based on interests</li>
+                                <li>Capable of both reason AND emotion</li>
+                                <li>Imperfect and corruptible</li>
+                                <li>Needing institutional constraints, not just virtue</li>
+                            </ul>
+
+                            <p style="margin-top: 15px; background: #fffbea; padding: 10px; border-radius: 5px;">
+                                <strong>Federalist No. 51:</strong> "Ambition must be made to counteract ambition."
+                            </p>
+                        </div>
+                    </div>
+
+                    <span class="real-world-badge">💭 Hypothetical Scenario</span>
+                    <div class="scenario-box">
+                        <h4>The Debate: A charismatic leader proposes eliminating checks and balances:</h4>
+                        <p>"The people elected me with a clear mandate. All this constitutional red tape just prevents me from delivering what voters want. Trust me to do what's right - I have the people's interests at heart."</p>
+                        
+                        <div class="perspective pro">
+                            <h5>Supporting Checks and Balances (Federalist View):</h5>
+                            <p>"This is exactly what Madison warned about! No matter how well-intentioned this leader seems, concentrated power corrupts. Our constitutional system doesn't rely on trusting anyone's virtue. Even if this leader is genuinely good, the precedent of removing checks would remain for future, less virtuous leaders. The Constitution protects us by assuming everyone in power will eventually abuse it unless institutionally constrained."</p>
+                        </div>
+
+                        <div class="perspective con">
+                            <h5>Supporting Strong Executive:</h5>
+                            <p>"The Federalist Papers' pessimistic view creates gridlock and prevents action! Sometimes crises require decisive leadership, not endless debate. The people's will, expressed through elections, should be supreme. If voters trust a leader, that leader should govern. We can vote them out if they abuse power - elections are the real check, not 250-year-old paranoia. Modern democracy requires efficiency, not 18th-century mechanisms."</p>
+                        </div>
+
+                        <div style="background: white; padding: 15px; border-radius: 5px; margin-top: 15px;">
+                            <strong>📊 Both Sides Have Valid Points:</strong>
+                            <ul style="margin-left: 25px; margin-top: 10px;">
+                                <li><strong>Checks Defenders:</strong> History repeatedly shows power corrupts; institutional safeguards prevent authoritarianism</li>
+                                <li><strong>Efficiency Advocates:</strong> Excessive checks create paralysis, frustrating legitimate democratic mandates</li>
+                            </ul>
+                        </div>
+
+                        <p style="margin-top: 15px; background: #f0f4f8; padding: 15px; border-radius: 5px;">
+                            <strong>💡 Real Connection:</strong> Debates about executive orders and whether presidents "overreach" or "finally get things done" reflect this tension.
+                        </p>
+                    </div>
+
+                    <div class="activity-box">
+                        <h4>Think About It:</h4>
+                        <p>Do you think the Founders were too pessimistic about human nature? Or were they realistic? How does this affect how we should design government?</p>
+                    </div>
+                </div>
+
+                <div class="nav-buttons">
+                    <button class="btn btn-secondary" onclick="prevSection()">← Back</button>
+                    <button class="btn btn-primary" onclick="nextSection()">Next Question →</button>
+                </div>
+            </div>
+
+            <!-- Section 9: Republic vs Democracy -->
+            <div class="section" id="section9">
+                <div class="question-card">
+                    <span class="question-number">Question 9 of 10</span>
+                    <h3>Why did the Founders prefer a republic over direct democracy?</h3>
+                    
+                    <div class="answer-section">
+                        <h4>What the Federalist Papers Said (Federalist No. 10):</h4>
+                        
+                        <div style="background: white; padding: 15px; border-radius: 5px; margin-top: 15px;">
+                            <p><strong>Pure Democracy:</strong> Citizens vote directly on every law</p>
+                            <ul style="margin-left: 25px; margin-top: 5px;">
+                                <li>❌ Majority can easily oppress minority</li>
+                                <li>❌ Decisions driven by passion, not reason</li>
+                                <li>❌ Works only in very small communities</li>
+                            </ul>
+
+                            <p style="margin-top: 15px;"><strong>Republic (Representative Democracy):</strong> Citizens elect representatives who make laws</p>
+                            <ul style="margin-left: 25px; margin-top: 5px;">
+                                <li>✓ Representatives filter and refine public opinion</li>
+                                <li>✓ More deliberation and expertise in lawmaking</li>
+                                <li>✓ Can work in large, diverse nations</li>
+                                <li>✓ Protects minority rights better</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="scenario-box">
+                        <h4>How This Works Today:</h4>
+                        <p>The United States uses representative democracy at all levels:</p>
+                        <ul style="margin-left: 25px; margin-top: 10px;">
+                            <li><strong>Congress:</strong> We elect senators and representatives to make federal laws</li>
+                            <li><strong>President:</strong> Electoral College filters popular choice</li>
+                            <li><strong>State Legislatures:</strong> Elected representatives make state laws</li>
+                        </ul>
+
+                        <p style="margin-top: 15px;"><strong>Exception - Direct Democracy Today:</strong></p>
+                        <p>Some states (like California) allow <span class="key-term">ballot initiatives</span> - citizens can vote directly on laws through propositions. The Federalist Papers warned this could lead to hasty, ill-considered decisions driven by temporary passions.</p>
+
+                        <div style="background: white; padding: 15px; border-radius: 5px; margin-top: 15px;">
+                            <strong>Example:</strong> California's Proposition system lets voters directly approve or reject laws on issues like taxes, marijuana legalization, and criminal justice. Supporters say this is true democracy. Critics say voters don't always have full information to make complex policy decisions.
+                        </div>
+
+                        <p style="margin-top: 15px; background: #f0f4f8; padding: 15px; border-radius: 5px;">
+                            <strong>💡 Key Takeaway:</strong> America remains mostly a republic (representative democracy), though some states have added direct democracy elements.
+                        </p>
+                    </div>
+
+                    <div class="activity-box">
+                        <h4>Think About It:</h4>
+                        <p>Should citizens vote directly on major issues, or should elected representatives make these decisions? What are the trade-offs of each approach?</p>
+                    </div>
+                </div>
+
+                <div class="nav-buttons">
+                    <button class="btn btn-secondary" onclick="prevSection()">← Back</button>
+                    <button class="btn btn-primary" onclick="nextSection()">Complete Activity →</button>
+                </div>
+            </div>
+
+            <!-- Section 10: Federal vs State Powers -->
+            <div class="section" id="section10">
+                <div class="question-card">
+                    <span class="question-number">Question 10 of 17</span>
+                    <h3>How do the Federalist Papers distinguish between federal and state powers?</h3>
+                    
+                    <div class="answer-section">
+                        <h4>What the Federalist Papers Said (Federalist No. 45):</h4>
+                        <p>James Madison explained the division of powers:</p>
+                        
+                        <div style="background: white; padding: 15px; border-radius: 5px; margin-top: 15px;">
+                            <p><strong>Federal Powers:</strong> "Few and defined"</p>
+                            <ul style="margin-left: 25px; margin-top: 5px;">
+                                <li>War and peace</li>
+                                <li>Foreign relations</li>
+                                <li>Interstate commerce</li>
+                                <li>National defense</li>
+                            </ul>
+
+                            <p style="margin-top: 15px;"><strong>State Powers:</strong> "Numerous and indefinite"</p>
+                            <ul style="margin-left: 25px; margin-top: 5px;">
+                                <li>Education</li>
+                                <li>Property laws</li>
+                                <li>Public safety</li>
+                                <li>Local government</li>
+                                <li>Day-to-day life</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <span class="real-world-badge">💭 Hypothetical Scenario</span>
+                    <div class="scenario-box">
+                        <h4>The Debate: Federal government passes a law requiring all schools to adopt a specific national curriculum, testing, and discipline procedures. States must comply or lose federal education funding.</h4>
+                        
+                        <div class="perspective pro">
+                            <h5>Federal Power Position:</h5>
+                            <p>"Education quality affects interstate commerce - poorly educated workers hurt the national economy. Under the Commerce Clause and Spending Clause, Congress can set standards. Would we let states teach false information? Some national standards ensure all American children receive adequate education. Federal funding comes with federal conditions - if states don't like it, refuse the money."</p>
+                        </div>
+
+                        <div class="perspective con">
+                            <h5>State Power Position:</h5>
+                            <p>"Education is THE state function - it's not in the Constitution as federal responsibility! The Tenth Amendment reserves non-delegated powers to states. Local communities know their students better than Washington bureaucrats. The Federalist Papers promised states would control daily life - education is exactly that. Using spending power to coerce compliance violates federalism. This is the federal overreach Anti-Federalists feared!"</p>
+                        </div>
+
+                        <div style="background: white; padding: 15px; border-radius: 5px; margin-top: 15px;">
+                            <strong>📊 Both Sides Have Valid Points:</strong>
+                            <ul style="margin-left: 25px; margin-top: 10px;">
+                                <li><strong>Federal Authority:</strong> National standards can ensure quality and prevent discrimination</li>
+                                <li><strong>State Authority:</strong> Education traditionally state/local; Constitution doesn't grant federal education power</li>
+                            </ul>
+                        </div>
+
+                        <p style="margin-top: 15px; background: #f0f4f8; padding: 15px; border-radius: 5px;">
+                            <strong>💡 Real Connection:</strong> Federal education policies (No Child Left Behind, Race to the Top) create exactly these debates.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="nav-buttons">
+                    <button class="btn btn-secondary" onclick="prevSection()">← Back</button>
+                    <button class="btn btn-primary" onclick="nextSection()">Next Question →</button>
+                </div>
+            </div>
+
+            <!-- Section 11: Dangers of Disunion -->
+            <div class="section" id="section11">
+                <div class="question-card">
+                    <span class="question-number">Question 11 of 17</span>
+                    <h3>What dangers of disunion did the early Federalist Papers warn about?</h3>
+                    
+                    <div class="answer-section">
+                        <h4>What the Federalist Papers Said (No. 2-8):</h4>
+                        <p>Without a strong union, the Founders warned the states would face:</p>
+                        <ul style="margin-left: 25px; margin-top: 10px;">
+                            <li><strong>Foreign Manipulation:</strong> European powers would play states against each other</li>
+                            <li><strong>Interstate Warfare:</strong> States would fight over borders, trade, and resources</li>
+                            <li><strong>Economic Weakness:</strong> Individual states couldn't negotiate good trade deals</li>
+                            <li><strong>Military Vulnerability:</strong> States couldn't defend against invasion</li>
+                            <li><strong>Loss of Freedom:</strong> Constant warfare would lead to military tyranny</li>
+                        </ul>
+                    </div>
+
+                    <span class="real-world-badge">💭 Hypothetical Scenario</span>
+                    <div class="scenario-box">
+                        <h4>The Debate: A coalition of states, frustrated with federal policies, threatens to form a separate confederation with its own trade agreements, currency, and foreign policy.</h4>
+                        
+                        <div class="perspective pro">
+                            <h5>Pro-Union Position (Federalist View):</h5>
+                            <p>"History shows what happens when the union fractures - we tried it under the Articles of Confederation and nearly collapsed! Within a generation, you'd be at war with each other over water rights, trade routes, and borders. China, Russia, and Europe would manipulate you against each other. You have legitimate grievances, but secession creates catastrophe. Work within the system - the Constitution provides mechanisms for change through the Senate, amendments, and federalism."</p>
+                        </div>
+
+                        <div class="perspective con">
+                            <h5>Pro-Separation Position:</h5>
+                            <p>"The federal government has become exactly the distant, unresponsive tyranny the Anti-Federalists warned about! Our states share values fundamentally different from other regions. Why should we be governed by people who don't understand our economy or culture? Smaller republics are more responsive and democratic - Madison was wrong that bigger is better. We could form peaceful trading relationships while governing ourselves according to our own principles."</p>
+                        </div>
+
+                        <div style="background: white; padding: 15px; border-radius: 5px; margin-top: 15px;">
+                            <strong>📊 Both Sides Have Valid Points:</strong>
+                            <ul style="margin-left: 25px; margin-top: 10px;">
+                                <li><strong>Pro-Union:</strong> Predictions came true during Civil War - secession led to catastrophic warfare and devastation</li>
+                                <li><strong>Pro-Separation:</strong> Some large unions do fracture (like Soviet Union); closer governance can be more effective</li>
+                            </ul>
+                        </div>
+
+                        <p style="margin-top: 15px; background: #f0f4f8; padding: 15px; border-radius: 5px;">
+                            <strong>💡 Real History:</strong> The Civil War (1861-1865) remains the ultimate test. Southern secession led to over 600,000 deaths and massive destruction.
+                        </p>
+                    </div>
+
+                    <div class="activity-box">
+                        <h4>Think About It:</h4>
+                        <p>Why do you think the Founders were so concerned about states separating? Do those concerns still apply today?</p>
+                    </div>
+                </div>
+
+                <div class="nav-buttons">
+                    <button class="btn btn-secondary" onclick="prevSection()">← Back</button>
+                    <button class="btn btn-primary" onclick="nextSection()">Next Question →</button>
+                </div>
+            </div>
+
+            <!-- Section 12: Presidential Veto Power -->
+            <div class="section" id="section12">
+                <div class="question-card">
+                    <span class="question-number">Question 12 of 17</span>
+                    <h3>How do the Federalist Papers justify the President's veto power?</h3>
+                    
+                    <div class="answer-section">
+                        <h4>What the Federalist Papers Said (Federalist No. 73):</h4>
+                        <p>Alexander Hamilton defended the presidential veto as essential for:</p>
+                        <ul style="margin-left: 25px; margin-top: 10px;">
+                            <li><strong>Checking Congress:</strong> Prevents legislative overreach</li>
+                            <li><strong>Protecting the Constitution:</strong> President can block unconstitutional laws</li>
+                            <li><strong>Defending Executive Power:</strong> Prevents Congress from weakening the presidency</li>
+                            <li><strong>Improving Legislation:</strong> Forces Congress to reconsider hasty laws</li>
+                            <li><strong>Representing All the People:</strong> President has national perspective vs. local congressional interests</li>
+                        </ul>
+                        
+                        <div style="background: white; padding: 15px; border-radius: 5px; margin-top: 15px;">
+                            <p><strong>How It Works:</strong></p>
+                            <p>1. Congress passes a bill</p>
+                            <p>2. President can sign it (becomes law) or veto it</p>
+                            <p>3. If vetoed, Congress can override with 2/3 vote in both houses</p>
+                            <p>4. This high threshold ensures negotiation and compromise</p>
+                        </div>
+                    </div>
+
+                    <div class="scenario-box">
+                        <h4>How This Works Today:</h4>
+                        <p>Presidents regularly use the veto power to check congressional legislation. When Congress passes a bill the President opposes, the President can reject it, requiring a two-thirds majority to override.</p>
+                        
+                        <p style="margin-top: 15px;"><strong>Types of Vetoes:</strong></p>
+                        <ul style="margin-left: 25px;">
+                            <li><strong>Regular Veto:</strong> President sends bill back with objections</li>
+                            <li><strong>Pocket Veto:</strong> President doesn't sign when Congress adjourns</li>
+                        </ul>
+
+                        <div style="background: white; padding: 15px; border-radius: 5px; margin-top: 15px;">
+                            <strong>Real Pattern:</strong>
+                            <p style="margin-top: 10px;">Congressional overrides are relatively rare because the 2/3 threshold is so high. This forces the President and Congress to negotiate and compromise - exactly what the Federalist Papers intended! When both parties control different branches, vetoes become more common as a bargaining tool.</p>
+                        </div>
+
+                        <p style="margin-top: 15px; background: #f0f4f8; padding: 15px; border-radius: 5px;">
+                            <strong>💡 Key Takeaway:</strong> The veto creates a system where the President and Congress must work together, promoting compromise over conflict.
+                        </p>
+                    </div>
+
+                    <div class="activity-box">
+                        <h4>Think About It:</h4>
+                        <p>Should one person (the President) be able to block the will of 535 elected members of Congress? Or is this an important check on legislative power?</p>
+                    </div>
+                </div>
+
+                <div class="nav-buttons">
+                    <button class="btn btn-secondary" onclick="prevSection()">← Back</button>
+                    <button class="btn btn-primary" onclick="nextSection()">Next Question →</button>
+                </div>
+            </div>
+
+            <!-- Section 13: Federal Taxation Power -->
+            <div class="section" id="section13">
+                <div class="question-card">
+                    <span class="question-number">Question 13 of 17</span>
+                    <h3>Why did the Federalist Papers argue the federal government needs independent taxation power?</h3>
+                    
+                    <div class="answer-section">
+                        <h4>What the Federalist Papers Said (Federalist No. 30-31):</h4>
+                        <p>Alexander Hamilton argued that government needs reliable funding to function:</p>
+                        
+                        <div style="background: white; padding: 15px; border-radius: 5px; margin-top: 15px;">
+                            <p><strong>Under the Articles of Confederation (1781-1789):</strong></p>
+                            <ul style="margin-left: 25px; margin-top: 5px;">
+                                <li>❌ Federal government had to ask states for money</li>
+                                <li>❌ States often refused or delayed payment</li>
+                                <li>❌ Government couldn't pay soldiers or debts</li>
+                                <li>❌ Nation was weak and nearly collapsed</li>
+                            </ul>
+
+                            <p style="margin-top: 15px;"><strong>Under the Constitution:</strong></p>
+                            <ul style="margin-left: 25px; margin-top: 5px;">
+                                <li>✓ Federal government can collect its own taxes</li>
+                                <li>✓ Can fund national defense reliably</li>
+                                <li>✓ Can respond to emergencies</li>
+                                <li>✓ Can fulfill constitutional duties</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="scenario-box">
+                        <h4>How Federal Taxation Works Today:</h4>
+                        <p>The federal government's power to tax (Article I, Section 8) enables it to:</p>
+                        <ul style="margin-left: 25px; margin-top: 10px;">
+                            <li>Maintain the military without relying on state contributions</li>
+                            <li>Build interstate infrastructure (highways, bridges)</li>
+                            <li>Respond to national crises (pandemics, natural disasters)</li>
+                            <li>Fund programs like Social Security and Medicare</li>
+                            <li>Pay national debts and obligations</li>
+                        </ul>
+
+                        <div style="background: white; padding: 15px; border-radius: 5px; margin-top: 15px;">
+                            <p><strong>The 16th Amendment (1913):</strong> Authorized federal income tax, which became the primary revenue source. This independent revenue stream enables the federal government to fulfill responsibilities the Federalist Papers argued required reliable funding.</p>
+                            
+                            <p style="margin-top: 15px;"><strong>Examples:</strong></p>
+                            <ul style="margin-left: 25px;">
+                                <li>2008 Financial Crisis: Federal government could respond immediately</li>
+                                <li>COVID-19 Pandemic: Federal aid to states and individuals</li>
+                                <li>Natural Disasters: FEMA response without waiting for state funding</li>
+                            </ul>
+                        </div>
+
+                        <p style="margin-top: 15px; background: #f0f4f8; padding: 15px; border-radius: 5px;">
+                            <strong>💡 Key Takeaway:</strong> Independent taxation power gives the federal government the financial capability to fulfill national responsibilities without depending on voluntary state contributions.
+                        </p>
+                    </div>
+
+                    <div class="activity-box">
+                        <h4>Think About It:</h4>
+                        <p>What would happen if the federal government had to ask states for money every time it needed to respond to a crisis? How does independent taxation affect federal power?</p>
+                    </div>
+                </div>
+
+                <div class="nav-buttons">
+                    <button class="btn btn-secondary" onclick="prevSection()">← Back</button>
+                    <button class="btn btn-primary" onclick="nextSection()">Next Question →</button>
+                </div>
+            </div>
+
+            <!-- Section 14: Treaty-Making Power -->
+            <div class="section" id="section14">
+                <div class="question-card">
+                    <span class="question-number">Question 14 of 17</span>
+                    <h3>How do the Federalist Papers defend the President and Senate sharing treaty-making power?</h3>
+                    
+                    <div class="answer-section">
+                        <h4>What the Federalist Papers Said (Federalist No. 64, 75):</h4>
+                        <p>John Jay and Alexander Hamilton explained why treaty-making is divided:</p>
+                        
+                        <div style="background: white; padding: 15px; border-radius: 5px; margin-top: 15px;">
+                            <p><strong>Why the President?</strong></p>
+                            <ul style="margin-left: 25px; margin-top: 5px;">
+                                <li>Can negotiate secretly when needed</li>
+                                <li>Provides unity and energy in foreign policy</li>
+                                <li>Has access to intelligence and diplomatic expertise</li>
+                                <li>Can respond quickly to international situations</li>
+                            </ul>
+
+                            <p style="margin-top: 15px;"><strong>Why the Senate?</strong></p>
+                            <ul style="margin-left: 25px; margin-top: 5px;">
+                                <li>Provides deliberation and wisdom (longer terms)</li>
+                                <li>Represents state interests</li>
+                                <li>Checks presidential ambition</li>
+                                <li>Ensures treaties have broad support</li>
+                                <li>Requires 2/3 majority (67 senators)</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="scenario-box">
+                        <h4>How This Works in Practice:</h4>
+                        <p><strong>The Constitutional Process:</strong></p>
+                        <ol style="margin-left: 25px; margin-top: 10px;">
+                            <li>President negotiates treaty with foreign nation(s)</li>
+                            <li>President submits treaty to Senate</li>
+                            <li>Senate debates and may amend</li>
+                            <li>Senate votes - requires 2/3 majority (67 votes)</li>
+                            <li>If approved, President ratifies treaty</li>
+                        </ol>
+
+                        <div style="background: white; padding: 15px; border-radius: 5px; margin-top: 15px;">
+                            <p><strong>Historical Example:</strong></p>
+                            <p style="margin-top: 10px;">The <strong>Treaty of Versailles (1919)</strong> after World War I was rejected by the Senate despite President Wilson's strong support. This showed the Senate's checking power - but also raised questions about whether the process prevented important foreign policy.</p>
+                            
+                            <p style="margin-top: 15px;"><strong>Modern Workaround:</strong></p>
+                            <p>Presidents increasingly use <span class="key-term">executive agreements</span> (which don't require Senate approval) for less formal international arrangements, leading to ongoing debates about the proper balance between presidential efficiency and Senate oversight.</p>
+                        </div>
+
+                        <p style="margin-top: 15px; background: #f0f4f8; padding: 15px; border-radius: 5px;">
+                            <strong>💡 Key Takeaway:</strong> The division creates careful scrutiny but can also create gridlock. Presidents and Senate must work together for major international agreements.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="nav-buttons">
+                    <button class="btn btn-secondary" onclick="prevSection()">← Back</button>
+                    <button class="btn btn-primary" onclick="nextSection()">Next Question →</button>
+                </div>
+            </div>
+
+            <!-- Section 15: Standing Army Question -->
+            <div class="section" id="section15">
+                <div class="question-card">
+                    <span class="question-number">Question 15 of 17</span>
+                    <h3>How did the Federalist Papers defend having a standing army despite fears of military tyranny?</h3>
+                    
+                    <div class="answer-section">
+                        <h4>What the Federalist Papers Said (Federalist No. 24-29):</h4>
+                        <p>Alexander Hamilton addressed Anti-Federalist concerns about a permanent military:</p>
+                        
+                        <div style="background: white; padding: 15px; border-radius: 5px; margin-top: 15px;">
+                            <p><strong>Anti-Federalist Fear:</strong> A standing army could be used to oppress citizens or stage a military coup.</p>
+                            
+                            <p style="margin-top: 15px;"><strong>Hamilton's Response:</strong></p>
+                            <ul style="margin-left: 25px; margin-top: 5px;">
+                                <li>Modern nations need ready military forces</li>
+                                <li>Can't wait to recruit during emergencies</li>
+                                <li>Constitutional safeguards prevent military tyranny</li>
+                                <li>Civilian control through elected officials</li>
+                                <li>Congress controls military funding (power of the purse)</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="scenario-box">
+                        <h4>How Civilian Control Works:</h4>
+                        <p>The United States maintains a permanent military with these constitutional safeguards:</p>
+                        
+                        <div style="background: white; padding: 15px; border-radius: 5px; margin-top: 15px;">
+                            <p><strong>Civilian Control Mechanisms:</strong></p>
+                            <ul style="margin-left: 25px; margin-top: 10px;">
+                                <li><strong>President is Commander-in-Chief</strong> (elected civilian)</li>
+                                <li><strong>Congress controls military budget</strong> (must authorize spending every 1-2 years)</li>
+                                <li><strong>Congress declares war</strong> (not the President or military)</li>
+                                <li><strong>Military leaders report to civilian leadership</strong></li>
+                                <li><strong>Peaceful transfer of power</strong> (military follows election results)</li>
+                            </ul>
+                        </div>
+
+                        <p style="margin-top: 15px;"><strong>However:</strong> Debates continue about the balance between presidential war powers and congressional authority to declare war. The U.S. hasn't formally declared war since 1941 (WWII), yet has engaged in major military operations in Korea, Vietnam, Iraq, Afghanistan, and elsewhere.</p>
+
+                        <p style="margin-top: 15px; background: #f0f4f8; padding: 15px; border-radius: 5px;">
+                            <strong>💡 Key Takeaway:</strong> The U.S. maintains a strong military under civilian control. The principle has held - but questions remain about war powers division between President and Congress.
+                        </p>
+                    </div>
+
+                    <div class="activity-box">
+                        <h4>Think About It:</h4>
+                        <p>Do you think the Founders' safeguards against military tyranny are sufficient? What keeps the military from taking over in America?</p>
+                    </div>
+                </div>
+
+                <div class="nav-buttons">
+                    <button class="btn btn-secondary" onclick="prevSection()">← Back</button>
+                    <button class="btn btn-primary" onclick="nextSection()">Next Question →</button>
+                </div>
+            </div>
+
+            <!-- Section 16: Electoral Districts Question -->
+            <div class="section" id="section16">
+                <div class="question-card">
+                    <span class="question-number">Question 16 of 17</span>
+                    <h3>How do larger electoral districts affect representation according to the Federalist Papers?</h3>
+                    
+                    <div class="answer-section">
+                        <h4>What the Federalist Papers Said (Federalist No. 10, 56-57):</h4>
+                        <p>James Madison argued that larger, more diverse districts would:</p>
+                        <ul style="margin-left: 25px; margin-top: 10px;">
+                            <li>Produce better-qualified representatives</li>
+                            <li>Make it harder for unfit candidates to win</li>
+                            <li>Force candidates to appeal to diverse groups</li>
+                            <li>Prevent local factions from dominating</li>
+                            <li>Create more deliberative, experienced legislators</li>
+                        </ul>
+                        
+                        <div style="background: #fffbea; padding: 15px; border-radius: 5px; margin-top: 15px;">
+                            <p><strong>Madison's Theory:</strong> In small districts, demagogues can manipulate voters. In large districts with diverse populations, candidates must build broad coalitions and demonstrate genuine qualifications.</p>
+                        </div>
+                    </div>
+
+                    <div class="scenario-box">
+                        <h4>How This Works Today:</h4>
+                        <p><strong>Then vs. Now:</strong></p>
+                        <ul style="margin-left: 25px; margin-top: 10px;">
+                            <li><strong>1790:</strong> Each House member represented ~30,000 people</li>
+                            <li><strong>Today:</strong> Each House member represents ~760,000 people</li>
+                            <li><strong>Why?</strong> House capped at 435 members in 1929</li>
+                        </ul>
+
+                        <div style="background: white; padding: 15px; border-radius: 5px; margin-top: 15px;">
+                            <p><strong>Madison's Vision in Practice:</strong></p>
+                            <p style="margin-top: 10px;">Large districts do force candidates to appeal to diverse constituencies. However, <span class="key-term">gerrymandering</span> (drawing district boundaries to favor one party) can undermine this by creating districts dominated by single factions.</p>
+                            
+                            <p style="margin-top: 15px;"><strong>The Senate Difference:</strong></p>
+                            <p>The Senate maintains equal representation for states regardless of population - Wyoming (580,000 people) has the same two senators as California (39 million people). This creates very different representative dynamics.</p>
+                        </div>
+
+                        <p style="margin-top: 15px; background: #f0f4f8; padding: 15px; border-radius: 5px;">
+                            <strong>💡 Key Takeaway:</strong> District size affects representation. Madison predicted large districts would improve quality, but modern practices like gerrymandering can distort this principle.
+                        </p>
+                    </div>
+
+                    <div class="activity-box">
+                        <h4>Think About It:</h4>
+                        <p>Is it better for representatives to serve smaller populations (closer connection) or larger populations (more diverse perspectives)? What are the trade-offs?</p>
+                    </div>
+                </div>
+
+                <div class="nav-buttons">
+                    <button class="btn btn-secondary" onclick="prevSection()">← Back</button>
+                    <button class="btn btn-primary" onclick="nextSection()">Complete Activity →</button>
+                </div>
+            </div>
+
+            <!-- Section 17: Summary -->
+            <div class="section" id="section17">
+                <div class="summary-card">
+                    <h3>🎉 Congratulations! You've Completed the Journey!</h3>
+                    <p style="margin-top: 15px;">You've explored 17 major questions about the Federalist Papers and how their principles work in modern America.</p>
+                </div>
+
+                <div class="question-card">
+                    <h3>What You Learned:</h3>
+                    
+                    <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-top: 15px;">
+                        <h4 style="color: #8B4513; margin-bottom: 15px;">Key Principles from the Federalist Papers:</h4>
+                        
+                        <ol style="margin-left: 25px;">
+                            <li style="margin: 12px 0;">
+                                <strong>Checks and Balances:</strong> Each branch can limit the others (Watergate example)
+                            </li>
+                            <li style="margin: 12px 0;">
+                                <strong>Federalism:</strong> Power shared between federal and state governments (ACA case)
+                            </li>
+                            <li style="margin: 12px 0;">
+                                <strong>Managing Factions:</strong> Large republics control competing interest groups
+                            </li>
+                            <li style="margin: 12px 0;">
+                                <strong>Electoral College:</strong> Balances state power with popular vote
+                            </li>
+                            <li style="margin: 12px 0;">
+                                <strong>Judicial Independence:</strong> Lifetime appointments protect from political pressure
+                            </li>
+                            <li style="margin: 12px 0;">
+                                <strong>Senate Stability:</strong> Six-year terms enable long-term thinking
+                            </li>
+                            <li style="margin: 12px 0;">
+                                <strong>Anti-Tyranny Design:</strong> Multiple mechanisms prevent power concentration
+                            </li>
+                            <li style="margin: 12px 0;">
+                                <strong>Human Nature:</strong> Constitution designed for self-interested people
+                            </li>
+                            <li style="margin: 12px 0;">
+                                <strong>Republic vs. Democracy:</strong> Representatives filter public opinion
+                            </li>
+                            <li style="margin: 12px 0;">
+                                <strong>Federal vs. State Powers:</strong> Clear division prevents conflicts
+                            </li>
+                            <li style="margin: 12px 0;">
+                                <strong>Unity vs. Disunion:</strong> Strong union prevents interstate warfare
+                            </li>
+                            <li style="margin: 12px 0;">
+                                <strong>Presidential Veto:</strong> Forces compromise between branches
+                            </li>
+                            <li style="margin: 12px 0;">
+                                <strong>Taxation Power:</strong> Federal government needs independent revenue
+                            </li>
+                            <li style="margin: 12px 0;">
+                                <strong>Treaty-Making:</strong> Shared power ensures deliberation in foreign policy
+                            </li>
+                            <li style="margin: 12px 0;">
+                                <strong>Standing Army:</strong> Civilian control prevents military tyranny
+                            </li>
+                            <li style="margin: 12px 0;">
+                                <strong>Electoral Districts:</strong> Size affects representation quality
+                            </li>
+                        </ol>
+                    </div>
+
+                    <div style="background: #d4edda; padding: 20px; border-radius: 8px; margin-top: 20px;">
+                        <h4 style="color: #155724; margin-bottom: 10px;">💡 Big Takeaway:</h4>
+                        <p>The Federalist Papers laid out principles that still shape American government today. While we debate how to apply them, the core ideas - limiting power, protecting rights, balancing interests - remain central to American democracy.</p>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <h3>Continue Your Learning:</h3>
+                    
+                    <div style="margin-top: 15px;">
+                        <h4 style="color: #8B4513; margin-bottom: 10px;">📚 Read More:</h4>
+                        <ul style="margin-left: 25px;">
+                            <li style="margin: 10px 0;">
+                                <a href="https://billofrightsinstitute.org/primary-sources/federalist-no-10" target="_blank">Full text of Federalist No. 10</a> (about factions)
+                            </li>
+                            <li style="margin: 10px 0;">
+                                <a href="https://avalon.law.yale.edu/subject_menus/fed.asp" target="_blank">All 85 Federalist Papers</a> (Yale Law School)
+                            </li>
+                            <li style="margin: 10px 0;">
+                                <a href="https://constitutioncenter.org" target="_blank">National Constitution Center</a> (interactive exhibits)
+                            </li>
+                            <li style="margin: 10px 0;">
+                                <a href="https://www.archives.gov/founding-docs" target="_blank">National Archives</a> (founding documents)
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div style="margin-top: 20px;">
+                        <h4 style="color: #8B4513; margin-bottom: 10px;">🤔 Discussion Questions:</h4>
+                        <ol style="margin-left: 25px;">
+                            <li style="margin: 10px 0;">Which Federalist Papers principle do you think is most important today? Why?</li>
+                            <li style="margin: 10px 0;">Do you think the Founders' concerns about tyranny are still relevant? Why or why not?</li>
+                            <li style="margin: 10px 0;">If you could change one aspect of the Constitution, what would it be and why?</li>
+                            <li style="margin: 10px 0;">How do the debates from 1787-1788 connect to political debates today?</li>
+                        </ol>
+                    </div>
+                </div>
+
+                <div class="activity-box">
+                    <h4>Share Your Learning!</h4>
+                    <p>Discuss what you learned with classmates, family, or friends. The Federalist Papers were written to spark public debate - keep that tradition alive!</p>
+                </div>
+
+                <div class="nav-buttons">
+                    <button class="btn btn-secondary" onclick="prevSection()">← Back</button>
+                    <button class="btn btn-primary" onclick="location.reload()">Start Over</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        let currentSection = 0;
+        const totalSections = 17;
+
+        function updateProgress() {
+            const progress = (currentSection / totalSections) * 100;
+            const progressBar = document.getElementById('progressBar');
+            progressBar.style.width = progress + '%';
+            progressBar.textContent = Math.round(progress) + '%';
+        }
+
+        function showSection(sectionNum) {
+            // Hide all sections
+            const sections = document.querySelectorAll('.section');
+            sections.forEach(section => section.classList.remove('active'));
+            
+            // Show current section
+            document.getElementById('section' + sectionNum).classList.add('active');
+            
+            // Update progress
+            updateProgress();
+            
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function nextSection() {
+            if (currentSection < totalSections) {
+                currentSection++;
+                showSection(currentSection);
+            }
+        }
+
+        function prevSection() {
+            if (currentSection > 0) {
+                currentSection--;
+                showSection(currentSection);
+            }
+        }
+
+        // Initialize
+        updateProgress();
+    </script>
+</body>
+</html>
